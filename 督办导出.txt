@@ -1,0 +1,18 @@
+select t.supervision_code,
+       t.supervision_genre,
+       t.approval_date,
+       t.manage_date,
+       t.undertake_dept_name,
+       t.supervision_matter,
+       t.supervision_gist,
+       t.supervision_require,
+       (select wmsys.wm_concat((Concat(Concat(c.collect_user_name, ':'),
+                                       c.collect_date || ':' ||
+                                       c.collect_content)))
+          from CIE_SUPERVISION_BACK_COLLECT c
+         where c.main_id = t.id) as fkqk
+  from CIE_SUPERVISION t,cie_main m
+ where t.id = m.id 
+   and m.subflag = '01'
+   and t.approval_date > '2020-09-01'
+   and t.approval_date < '2020-09-24'
